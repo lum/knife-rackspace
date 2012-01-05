@@ -209,6 +209,7 @@ class Chef
       def bootstrap_for_node(server)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = [public_dns_name(server)]
+        bootstrap.config[:eth1] = [server.addresses["private"][0]]
         bootstrap.config[:run_list] = config[:run_list]
         bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
         bootstrap.config[:ssh_password] = server.password
