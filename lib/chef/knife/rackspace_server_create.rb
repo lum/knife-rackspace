@@ -89,6 +89,24 @@ class Chef
         :proc => Proc.new { |d| Chef::Config[:knife][:distro] = d },
         :default => "ubuntu10.04-gems"
 
+      option :debug,
+        :long => "--debug",
+        :description => "Run chef-client in debug mode",
+        :boolean => true,
+        :default => false
+
+      option :reboot,
+        :long => "--reboot",
+        :description => "Reboot the server after bootstrapping",
+        :boolean => true,
+        :default => false
+
+      option :hardreboot,
+        :long => "--hardreboot",
+        :description => "Force Reboot the server after bootstrapping",
+        :boolean => true,
+        :default => false
+
       option :template_file,
         :long => "--template-file TEMPLATE",
         :description => "Full path to location of template to use",
@@ -199,10 +217,13 @@ class Chef
         bootstrap.config[:prerelease] = config[:prerelease]
         bootstrap.config[:bootstrap_version] = locate_config_value(:bootstrap_version)
         bootstrap.config[:distro] = locate_config_value(:distro)
+        bootstrap.config[:debug] = config[:debug]
         # bootstrap will run as root...sudo (by default) also messes up Ohai on CentOS boxes
         bootstrap.config[:use_sudo] = true unless config[:ssh_user] == 'root'
         bootstrap.config[:template_file] = locate_config_value(:template_file)
         bootstrap.config[:environment] = config[:environment]
+        bootstrap.config[:reboot] = config[:reboot]
+        bootstrap.config[:hardreboot] = config[:hardreboot]
         bootstrap
       end
 
